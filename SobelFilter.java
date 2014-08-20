@@ -82,9 +82,8 @@ public class SobelFilter{
 			inputFile = ImageIO.read(example);
 			width = inputFile.getWidth();
 			height = inputFile.getHeight();
-			System.out.println("Success!! Width: " + width + " Height: "  + height);
 			outputFile = edgeDetection(inputFile);
-			int clr = outputFile.getRGB(5,5);
+			System.out.println("Success!! Width: " + width + " Height: "  + height);
 			
 		} 
 		catch (IOException e){ /* DO NOTHING */ }
