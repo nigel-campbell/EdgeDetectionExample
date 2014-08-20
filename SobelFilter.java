@@ -10,28 +10,16 @@ public class SobelFilter{
 	static BufferedImage inputFile, outputFile;
 	static int width, height;
 	static File example, result;	
-	static double sobelKernelX[][] = { {-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1} };
-	static double sobelKernelY[][];	// Not yet defined
-
+	
 	/* NPU APPROXIMATION START */
 	public static double sobel(double[][] window){ 
 		double x, y, r = 0; 
-		
 		x = ( window[0][0] + 2 * window[0][1] + window[0][2] ); 
 		x -= ( window[2][0] + 2 * window[2][1] + window[2][2] );
 		y = ( window[0][2] + 2 * window[1][2] + window[2][2] );
 		y -= ( window[0][0] + 2 * window[1][1] + window[2][0]);
 		r = Math.sqrt( (x*x) + (y*y) );
 		if (r > 255.0) r = 0;
-		
-		/*
-		for (int y = 0; y < 3; y++){
-			for(int x = 0; x < 3; x++){
-				r+= sobelKernelX[x][y] * window[x][y];
-				r+= sobelKernelY[x]
-			}
-		}
-		*/
 		return r;
 	}
 	/* NPU APPROXIMATION END */
@@ -59,7 +47,6 @@ public class SobelFilter{
 				if ( (currX >= 0 && currX < width) && (currY >= 0 && currY < height) ){
 					int rgbRawValue = srcImg.getRGB(currX, currY);
 					int grayScaleValue = getGreyScale(rgbRawValue);
-					// retVal[xpos + 1][ypos + 1] = srcImg.getRGB(currX, currY);
 					retVal[xpos + 1][ypos + 1] = grayScaleValue;
 				}
 				else
@@ -81,14 +68,7 @@ public class SobelFilter{
 				int sobelRGBValue = setGreyScaleValue((int) sobelValue);
 				int grayScaleMag = getGreyScale( (int) newValue);
 				int greyscaleValue = setGreyScaleValue(grayScaleMag);
-				// retVal.setRGB(x, y, (int) Math.round(newValue) );
 				retVal.setRGB(x, y, sobelRGBValue);
-				System.out.println("X Loc: " + x + " Y Loc: " + y + " NewValue: " + (int) newValue);
-				printRGB( (int) newValue);
-				printRGB((int)window[1][1]);
-				System.out.println("Gray scale magnitude: " + grayScaleMag);
-				System.out.println("Gray scale value: " + greyscaleValue);
-				if(sobelValue < 255) System.out.println("Sobel value: " + sobelValue);
 			}
 		}
 		return retVal;
